@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 /// Read text file line by line
 class LineReader {
     let path: String
