@@ -9,6 +9,57 @@
 import Foundation
 
 
+struct Supervisor {
+    var activity : Activity
+    var name : String
+    
+    init(activity: Activity, name: String)
+    {
+        self.activity = activity
+        self.name = activity.name
+    }
+}
+
+struct Activity {
+    var studentNames : [String]
+    var name : String
+    var personCap : Int
+    var supervisorName : String
+    
+    init(studentNames: [String], name: String, personCap: Int, supervisorName : String)
+    {
+        self.studentNames = studentNames
+        self.name = name
+        self.personCap = personCap
+        self.supervisorName = supervisorName
+    }
+}
+
+struct Student {
+    var email: String
+    var timestamp: String
+    var activities: [String]
+    
+    init(email: String, timestamp: String, activities: [String])
+    {
+        self.email = email
+        self.timestamp = timestamp
+        self.activities = activities
+    }
+}
+
+struct Advisor {
+    var students : [Student]
+    
+    init(students: [Student])
+    {
+        self.students = students
+    }
+}
+
+
+
+
 /// Read text file line by line
 class LineReader {
     let path: String
@@ -52,13 +103,6 @@ guard let reader = LineReader(path: "/Users/student/Documents/MentalHealthWeek/s
     
 }
 
-// Iterate over each line in the file and print to the terminal
-func seperate (rawString : String) -> [String] {
-    var lineArray = [String]()
-    
-    return lineArray
-    
-}
 
 
 
@@ -66,12 +110,48 @@ for line in reader {
     //print(">" + line.trimmingCharacters(in: .whitespacesAndNewlines))
     var currentLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
     
+    var input = line.trimmingCharacters(in: .whitespacesAndNewlines)
+    var parsedInput = input.characters.split{$0 == "\t"}.map(String.init)
     
     
-    print(">", terminator: "")
-    print(currentLine)
+    if (parsedInput.count > 0 && parsedInput.count < 100){ //these are all the poeple who fully completed the survey
+        
+
+            print(parsedInput)
+            
+            
+        
+    }
     
-    
-    
+    //print(">", terminator: "")
+    //print(currentLine)
 }
+
+// Open an output file for writing, overwriting any existing data
+guard let writer = LineWriter(path: "/Users/student/Documents/MentalHealthWeek/survey_output.txt", appending: false) else {
+    print("Cannot open output file")
+    exit(0); // cannot open output file
+}
+
+// Iterate over the array of column headers and print each element to the output file
+//for (column, descriptor) in columnDescriptors.enumerated() {
+
+
+
+    writer.write(line: "Young Jeff          Ghoeshy             Grade 12                          ")
+    writer.write(line: "")
+    writer.write(line: "Monday              Tuesday             Wednesday           Thursday        Friday          ")
+    writer.write(line: "")
+    writer.write(line: "Animal Therepy      Animal Therepy      Animal Therepy      Animal Therepy  Animal Therepy")
+    writer.write(line: "")
+
+    //writer.write(line: "                                 Ghoeshy                                  ")
+
+//}
+
+// Close the output file
+writer.close()
+
+
+
 
