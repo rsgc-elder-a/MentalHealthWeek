@@ -137,7 +137,12 @@ func grade9(line : [String])  {
         count += 1
     }
     //(line: "\(format(baseWord: allAct[0]))\(format(baseWord: allAct[1]))\(format(baseWord: allAct[2])\(format(baseWord: allAct[3]))\(format(baseWord: allAct[4]))")
-    writer.write(line: "\(format(baseWord: allAct[0]))\(format(baseWord: allAct[1]))\(format(baseWord: allAct[2]))\(format(baseWord: allAct[3]))\(format(baseWord: allAct[4]))")
+    
+  //  writer.write(line: "|\(format(baseWord: allAct[0]))\(format(baseWord: allAct[1]))\(format(baseWord: allAct[2]))\(format(baseWord: allAct[3]))\(format(baseWord: allAct[4]))|")
+    
+        writer.write(line: "\(format(baseWord: allAct[0]))\(format(baseWord: allAct[1]))\(format(baseWord: allAct[2]))\(format(baseWord: allAct[3]))\(format(baseWord: allAct[4]))")
+    
+    //writer.write(line: "|____________________________________________________________________________________________________|")
     for _ in 1...3{
         writer.write(line: "")
     }
@@ -145,22 +150,21 @@ func grade9(line : [String])  {
 
 func grade10(line : [String]) {
     
-  
+    
 }
 
 func grade11(line : [String]) {
-   
+    
 }
 
 func grade12(line : [String]) {
-  
+    
 }
 
 
 func format (baseWord: String) -> String {
-    //var test = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-    //writer.write(line: "\(test)")
-    let standardAmount = 19
+    
+    let standardAmount = 16
     var needChar = 0
     var charAmount = 0
     var newChar = [Character]()
@@ -170,7 +174,7 @@ func format (baseWord: String) -> String {
         charAmount += 1
     }
     if (standardAmount > charAmount) {
-    needChar = standardAmount - charAmount
+        needChar = standardAmount - charAmount
     }
     for i in 0...needChar {
         newChar.append(" ")
@@ -178,6 +182,32 @@ func format (baseWord: String) -> String {
     var newString = String(newChar)
     return newString
 }
+
+
+func finishLine (start: String) -> String {
+    var finalString = start
+    var lineLegnth = 94
+    var count2 = 0
+    var sub = 0
+    
+    for char in start.characters {
+        count2 += 1
+    }
+    if count2 < 94{
+        sub = (lineLegnth) - (count2) // 95 is the amount of char in a line
+        
+        for _ in 0...sub {
+            finalString += " "
+        }
+    }
+    finalString += "      |"
+    
+    return finalString
+}
+
+
+
+
 
 
 var first = false
@@ -209,16 +239,28 @@ for (number, line) in reader.enumerated() {
     }
     first = true
     
+    
     //print(firstLine)
     var id = currentLine[5]
     var advisor = currentLine[10]
     var grade1 = currentLine[9]
     var week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     
+    var secondLine = finishLine(start: "\(format(baseWord: id)) -> \(format(baseWord: advisor))\(format(baseWord: grade1))")
+    print(secondLine)
+    /*
+    writer.write(line: "_____________________________________________________________________________________________________")
+    writer.write(line: "\(finishLine(start: secondLine))")
+    writer.write(line: "|                                                                                                    |" )
+    writer.write(line: "|\(format(baseWord: week[0]))\(format(baseWord: week[1]))\(format(baseWord: week[2]))\(format(baseWord: week[3]))\(format(baseWord: week[4]))|")
+    writer.write(line: "|                                                                                                    |" )
+    */
+
     writer.write(line: "\(format(baseWord: id)) -> \(format(baseWord: advisor))\(format(baseWord: grade1))")
     writer.write(line: "" )
     writer.write(line: "\(format(baseWord: week[0]))\(format(baseWord: week[1]))\(format(baseWord: week[2]))\(format(baseWord: week[3]))\(format(baseWord: week[4]))")
     writer.write(line: "" )
+    
     
     var grade = currentLine[9]
     switch(grade){
