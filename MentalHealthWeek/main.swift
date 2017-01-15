@@ -60,45 +60,48 @@ struct Advisor {
 
 
 
-/// Read text file line by line
-class LineReader {
-    let path: String
-    
-    fileprivate let file: UnsafeMutablePointer<FILE>!
-    
-    init?(path: String) {
-        self.path = path
-        
-        file = fopen(path, "r")
-        
-        guard file != nil else { return nil }
-        
-    }
-    
-    var nextLine: String? {
-        var line:UnsafeMutablePointer<CChar>? = nil
-        var linecap:Int = 0
-        defer { free(line) }
-        return getline(&line, &linecap, file) > 0 ? String(cString: line!) : nil
-    }
-    
-    deinit {
-        fclose(file)
-    }
-}
+///// Read text file line by line
+//class LineReader {
+//    let path: String
+//    
+//    fileprivate let file: UnsafeMutablePointer<FILE>!
+//    
+//    init?(path: String) {
+//        self.path = path
+//        
+//        file = fopen(path, "r")
+//        
+//        guard file != nil else { return nil }
+//        
+//    }
+//    
+//    var nextLine: String? {
+//        var line:UnsafeMutablePointer<CChar>? = nil
+//        var linecap:Int = 0
+//        defer { free(line) }
+//        return getline(&line, &linecap, file) > 0 ? String(cString: line!) : nil
+//    }
+//    
+//    deinit {
+//        fclose(file)
+//    }
+//}
+//
+//extension LineReader: Sequence {
+//    func  makeIterator() -> AnyIterator<String> {
+//        return AnyIterator<String> {
+//            return self.nextLine
+//        }
+//    }
+//}
 
-extension LineReader: Sequence {
-    func  makeIterator() -> AnyIterator<String> {
-        return AnyIterator<String> {
-            return self.nextLine
-        }
-    }
-}
+
+
 
 // Read the text file (place in your home folder)
 // Path will probably be /Users/student/survey_response_sample.txt
 // Obtain the data file on Haiku, Day 37
-guard let reader = LineReader(path: "/Users/student/Documents/MentalHealthWeek/survey_response_sample.txt") else {
+guard let reader = LineReader(path: "/Users/student/Documents/MentalHealthWeek/survey_response_all_data_new_headers.csv") else {
     exit(0); // cannot open file
     
 }
@@ -119,7 +122,6 @@ for line in reader {
 
             print(parsedInput)
             
-            
         
     }
     
@@ -136,8 +138,6 @@ guard let writer = LineWriter(path: "/Users/student/Documents/MentalHealthWeek/s
 
 // Iterate over the array of column headers and print each element to the output file
 //for (column, descriptor) in columnDescriptors.enumerated() {
-
-
 
     writer.write(line: "Young Jeff          Ghoeshy             Grade 12                          ")
     writer.write(line: "")
