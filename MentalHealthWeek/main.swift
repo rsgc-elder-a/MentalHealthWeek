@@ -57,6 +57,18 @@ struct Advisor {
     }
 }
 
+var activities : [Activity] = [
+    Activity(studentNames: [""], name: "Sleep In", personCap: 500, supervisorName: "Mr. Fitz"),
+    Activity(studentNames: [""], name: "Casual Breakfast", personCap: 160, supervisorName: "Ms. Totten"),
+    Activity(studentNames: [""], name: "Physical Activity", personCap: 50, supervisorName: "Mr. T/ Mr. S"),
+    Activity(studentNames: [""], name: "Relaxation", personCap: 160, supervisorName: "Fr. Donkin"),
+    Activity(studentNames: [""], name: "Academic Management", personCap: 30, supervisorName: "Fr. D and NVH(Monday) KU (Wed-Fri) TH"),
+    Activity(studentNames: [""], name: "Yoga", personCap: 20, supervisorName: "Ms. McPhedran"),
+    Activity(studentNames: [""], name: "Animal Therapy", personCap: 16, supervisorName: "Ms. Kaye/Fitz"),
+    Activity(studentNames: [""], name: "Massage", personCap: 12, supervisorName: "Ms."),
+]
+
+
 
 // Open an output file for writing, overwriting any existing data
 guard let writer = LineWriter(path: "/Users/student/Documents/MentalHealthWeek/survey_output.txt", appending: false) else {
@@ -68,17 +80,6 @@ guard let writer = LineWriter(path: "/Users/student/Documents/MentalHealthWeek/s
 // Iterate over the array of column headers and print each element to the output file
 //for (column, descriptor) in columnDescriptors.enumerated() {
 
-
-writer.write(line: "Young Jeff          Ghoeshy             Grade 12                          ")
-writer.write(line: "")
-writer.write(line: "Monday              Tuesday             Wednesday           Thursday        Friday          ")
-writer.write(line: "")
-writer.write(line: "Animal Therepy      Animal Therepy      Animal Therepy      Animal Therepy  Animal Therepy")
-writer.write(line: "")
-
-//writer.write(line: "                                 Ghoeshy                                  ")
-
-//}
 
 
 
@@ -100,47 +101,84 @@ var macCaps = [160, 50, 160, 30, 20, 16, 12]
 
 
 func activity (whole: String) -> String  {
-    var switchNow = false
-    var recordNow = false
+    var switchNow = 0
+    var charSetup = [Character]()
+    var output = ""
     for char in whole.characters {
-    
-        if char == "_" {
-            if switchNow == true {
-                recordNow = true
-            }
-            switchNow = true
+        
+        
+        if switchNow == 2 {
+            charSetup.append(char)
+            
         }
+        
+        if char == "_" {
+            switchNow += 1
+        }
+        
     }
-    
+    output = String(charSetup)
+    return output
 }
 
+
+
 func grade9(line : [String])  {
-var count = 0
+    var count = 0
+    var allAct = [String]()
     for value in line {
         
-            if (value == "1"){
-            print(firstLine[count])
-           // print("Pizza")
+        if (value == "1"){
+            //print(firstLine[count])
+            allAct.append(activity(whole: firstLine[count]))
+            // print("Pizza")
         }
+        
         count += 1
+    }
+    //(line: "\(format(baseWord: allAct[0]))\(format(baseWord: allAct[1]))\(format(baseWord: allAct[2])\(format(baseWord: allAct[3]))\(format(baseWord: allAct[4]))")
+    writer.write(line: "\(format(baseWord: allAct[0]))\(format(baseWord: allAct[1]))\(format(baseWord: allAct[2]))\(format(baseWord: allAct[3]))\(format(baseWord: allAct[4]))")
+    for _ in 1...3{
+        writer.write(line: "")
     }
 }
 
 func grade10(line : [String]) {
     
+  
 }
 
 func grade11(line : [String]) {
-    
+   
 }
 
 func grade12(line : [String]) {
-
+  
 }
 
 
-// Close the output file
-writer.close() // MAKE NOTE OF THIS
+func format (baseWord: String) -> String {
+    //var test = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    //writer.write(line: "\(test)")
+    let standardAmount = 19
+    var needChar = 0
+    var charAmount = 0
+    var newChar = [Character]()
+    
+    for char in baseWord.characters {
+        newChar.append(char)
+        charAmount += 1
+    }
+    if (standardAmount > charAmount) {
+    needChar = standardAmount - charAmount
+    }
+    for i in 0...needChar {
+        newChar.append(" ")
+    }
+    var newString = String(newChar)
+    return newString
+}
+
 
 var first = false
 // Iterate over each line in the file and print to the terminal
@@ -155,14 +193,14 @@ for (number, line) in reader.enumerated() {
     columnDescriptors = line.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).components(separatedBy: ",")
     
     var currentLine = [String]()
-   
-   
+    
+    
     // Iterate over the array to get values
     for (column, value) in columnDescriptors.enumerated() {
         
-
+        
         currentLine.append(value)
-
+        
         if (first == false){
             firstLine.append(value)
         }
@@ -170,6 +208,17 @@ for (number, line) in reader.enumerated() {
         
     }
     first = true
+    
+    //print(firstLine)
+    var id = currentLine[5]
+    var advisor = currentLine[10]
+    var grade1 = currentLine[9]
+    var week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    
+    writer.write(line: "\(format(baseWord: id)) -> \(format(baseWord: advisor))\(format(baseWord: grade1))")
+    writer.write(line: "" )
+    writer.write(line: "\(format(baseWord: week[0]))\(format(baseWord: week[1]))\(format(baseWord: week[2]))\(format(baseWord: week[3]))\(format(baseWord: week[4]))")
+    writer.write(line: "" )
     
     var grade = currentLine[9]
     switch(grade){
@@ -183,9 +232,13 @@ for (number, line) in reader.enumerated() {
         grade12(line: currentLine)
     }
     
-    //print(firstLine)
+    
     //print(currentLine)
     //print("Identifier: \(currentLine[5]) Grade: \(currentLine[6]) Advisor: \(currentLine[7])")
     
 }
 //print(firstLine)
+
+// Close the output file
+writer.close() // MAKE NOTE OF THIS
+
