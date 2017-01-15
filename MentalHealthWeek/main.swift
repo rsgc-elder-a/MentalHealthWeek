@@ -58,42 +58,28 @@ struct Advisor {
 }
 
 
+// Open an output file for writing, overwriting any existing data
+guard let writer = LineWriter(path: "/Users/student/Documents/MentalHealthWeek/survey_output.txt", appending: false) else {
+    print("Cannot open output file")
+    exit(0); // cannot open output file
+}
 
 
-///// Read text file line by line
-//class LineReader {
-//    let path: String
-//    
-//    fileprivate let file: UnsafeMutablePointer<FILE>!
-//    
-//    init?(path: String) {
-//        self.path = path
-//        
-//        file = fopen(path, "r")
-//        
-//        guard file != nil else { return nil }
-//        
-//    }
-//    
-//    var nextLine: String? {
-//        var line:UnsafeMutablePointer<CChar>? = nil
-//        var linecap:Int = 0
-//        defer { free(line) }
-//        return getline(&line, &linecap, file) > 0 ? String(cString: line!) : nil
-//    }
-//    
-//    deinit {
-//        fclose(file)
-//    }
+// Iterate over the array of column headers and print each element to the output file
+//for (column, descriptor) in columnDescriptors.enumerated() {
+
+
+writer.write(line: "Young Jeff          Ghoeshy             Grade 12                          ")
+writer.write(line: "")
+writer.write(line: "Monday              Tuesday             Wednesday           Thursday        Friday          ")
+writer.write(line: "")
+writer.write(line: "Animal Therepy      Animal Therepy      Animal Therepy      Animal Therepy  Animal Therepy")
+writer.write(line: "")
+
+//writer.write(line: "                                 Ghoeshy                                  ")
+
 //}
-//
-//extension LineReader: Sequence {
-//    func  makeIterator() -> AnyIterator<String> {
-//        return AnyIterator<String> {
-//            return self.nextLine
-//        }
-//    }
-//}
+
 
 
 
@@ -103,56 +89,103 @@ struct Advisor {
 // Obtain the data file on Haiku, Day 37
 guard let reader = LineReader(path: "/Users/student/Documents/MentalHealthWeek/survey_response_all_data_new_headers.csv") else {
     exit(0); // cannot open file
-    
 }
 
 
+// Structures used to process data
+var columnDescriptors : [String] = []
+var firstLine = [String]()
+
+var macCaps = [160, 50, 160, 30, 20, 16, 12]
 
 
-for line in reader {
-    //print(">" + line.trimmingCharacters(in: .whitespacesAndNewlines))
-    var currentLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
+func activity (whole: String) -> String  {
+    var switchNow = false
+    var recordNow = false
+    for char in whole.characters {
     
-    var input = line.trimmingCharacters(in: .whitespacesAndNewlines)
-    var parsedInput = input.characters.split{$0 == "\t"}.map(String.init)
-    
-    
-    if (parsedInput.count > 0 && parsedInput.count < 100){ //these are all the poeple who fully completed the survey
-        
-
-            print(parsedInput)
-            
-        
+        if char == "_" {
+            if switchNow == true {
+                recordNow = true
+            }
+            switchNow = true
+        }
     }
     
+}
+
+func grade9(line : [String])  {
+var count = 0
+    for value in line {
+        
+            if (value == "1"){
+            print(firstLine[count])
+           // print("Pizza")
+        }
+        count += 1
+    }
+}
+
+func grade10(line : [String]) {
     
-    //print(">", terminator: "")
-    //print(currentLine)
 }
 
-// Open an output file for writing, overwriting any existing data
-guard let writer = LineWriter(path: "/Users/student/Documents/MentalHealthWeek/survey_output.txt", appending: false) else {
-    print("Cannot open output file")
-    exit(0); // cannot open output file
+func grade11(line : [String]) {
+    
 }
 
-// Iterate over the array of column headers and print each element to the output file
-//for (column, descriptor) in columnDescriptors.enumerated() {
+func grade12(line : [String]) {
 
-    writer.write(line: "Young Jeff          Ghoeshy             Grade 12                          ")
-    writer.write(line: "")
-    writer.write(line: "Monday              Tuesday             Wednesday           Thursday        Friday          ")
-    writer.write(line: "")
-    writer.write(line: "Animal Therepy      Animal Therepy      Animal Therepy      Animal Therepy  Animal Therepy")
-    writer.write(line: "")
+}
 
-    //writer.write(line: "                                 Ghoeshy                                  ")
-
-//}
 
 // Close the output file
-writer.close()
+writer.close() // MAKE NOTE OF THIS
 
+var first = false
+// Iterate over each line in the file and print to the terminal
+for (number, line) in reader.enumerated() {
+    
+    
+    // Look for first line and build an array of column descriptors
+    //if number == 0 {
+    
+    // Get an array of all the information on the first line
+    // "Explode" the string into an array of smaller strings using a comma as a delimiter
+    columnDescriptors = line.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).components(separatedBy: ",")
+    
+    var currentLine = [String]()
+   
+   
+    // Iterate over the array to get values
+    for (column, value) in columnDescriptors.enumerated() {
+        
 
+        currentLine.append(value)
 
-
+        if (first == false){
+            firstLine.append(value)
+        }
+        
+        
+    }
+    first = true
+    
+    var grade = currentLine[9]
+    switch(grade){
+    case "9":
+        grade9(line: currentLine)
+    case "10":
+        grade10(line: currentLine)
+    case "11":
+        grade11(line: currentLine)
+    default:
+        grade12(line: currentLine)
+    }
+    
+    //print(firstLine)
+    //print(currentLine)
+    //print("Identifier: \(currentLine[5]) Grade: \(currentLine[6]) Advisor: \(currentLine[7])")
+    
+}
+//print(firstLine)
