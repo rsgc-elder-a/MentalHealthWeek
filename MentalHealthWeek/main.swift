@@ -123,6 +123,7 @@ for line in reader {
         
     }
     
+    
     //print(">", terminator: "")
     //print(currentLine)
 }
